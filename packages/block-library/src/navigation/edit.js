@@ -7,7 +7,7 @@ import classnames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { useMemo, Fragment, useRef } from '@wordpress/element';
+import { useMemo, useState, Fragment, useRef } from '@wordpress/element';
 import {
 	InnerBlocks,
 	InspectorControls,
@@ -28,6 +28,7 @@ import {
 	ToggleControl,
 	Toolbar,
 	ToolbarGroup,
+	SelectControl,
 } from '@wordpress/components';
 import { compose } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
@@ -48,7 +49,10 @@ function Navigation( {
 	hasExistingNavItems,
 	hasResolvedPages,
 	isRequestingPages,
+	hasResolvedMenus,
+	isRequestingMenus,
 	pages,
+	menus,
 	setAttributes,
 	setFontSize,
 	updateNavItemBlocks,
@@ -59,6 +63,7 @@ function Navigation( {
 	//
 	/* eslint-disable @wordpress/no-unused-vars-before-return */
 	const ref = useRef();
+	const [ selectedMenu, setSelectedMenu ] = useState( '' );
 	const { selectBlock } = useDispatch( 'core/block-editor' );
 
 	const {
@@ -135,6 +140,7 @@ function Navigation( {
 	}
 
 	const hasPages = hasResolvedPages && pages && pages.length;
+	const hasMenus = hasResolvedMenus && menus && menus.length;
 
 	const blockClassNames = classnames( className, {
 		[ `items-justified-${ attributes.itemsJustification }` ]: attributes.itemsJustification,
@@ -170,6 +176,31 @@ function Navigation( {
 						>
 							{ __( 'Create from all top-level pages' ) }
 						</Button>
+
+						{ hasMenus && (
+							<>
+								<SelectControl
+									label={ __( 'Create from existing Menu' ) }
+									value={ selectedMenu }
+									onChange={ ( value ) => {
+										setSelectedMenu( value );
+									} }
+									options={ menus.map( ( mappedMenu ) => {
+										return {
+											label: mappedMenu.name,
+											value: mappedMenu.slug,
+										};
+									} ) }
+								/>
+								<Button
+									isSecondary
+									className="wp-block-navigation-placeholder__button"
+									onClick={ () => {} }
+								>
+									{ __( 'Create from Menu' ) }
+								</Button>
+							</>
+						) }
 
 						<Button
 							isLink
@@ -261,11 +292,12 @@ function Navigation( {
 						className={ blockClassNames }
 						style={ blockInlineStyles }
 					>
-						{ ! hasExistingNavItems && isRequestingPages && (
-							<>
-								<Spinner /> { __( 'Loading Navigation…' ) }{ ' ' }
-							</>
-						) }
+						{ ! hasExistingNavItems &&
+							( isRequestingPages || isRequestingMenus ) && (
+								<>
+									<Spinner /> { __( 'Loading Navigation…' ) }{ ' ' }
+								</>
+							) }
 						<InnerBlocks
 							ref={ ref }
 							allowedBlocks={ [ 'core/navigation-link' ] }
@@ -301,6 +333,7 @@ export default compose( [
 			'getEntityRecords',
 			[ 'postType', 'page', filterDefaultPages ],
 		];
+		const menusSelect = [ 'core', 'getEntityRecords', [ 'root', 'menu' ] ];
 
 		return {
 			hasExistingNavItems: !! innerBlocks.length,
@@ -309,11 +342,18 @@ export default compose( [
 				'page',
 				filterDefaultPages
 			),
+			menus: select( 'core' ).getEntityRecords( 'root', 'menu' ),
 			isRequestingPages: select( 'core/data' ).isResolving(
 				...pagesSelect
 			),
+			isRequestingMenus: select( 'core/data' ).isResolving(
+				...menusSelect
+			),
 			hasResolvedPages: select( 'core/data' ).hasFinishedResolution(
 				...pagesSelect
+			),
+			hasResolvedMenus: select( 'core/data' ).hasFinishedResolution(
+				...menusSelect
 			),
 		};
 	} ),
