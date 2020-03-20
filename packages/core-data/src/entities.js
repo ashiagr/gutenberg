@@ -60,7 +60,6 @@ export const defaultEntities = [
 		baseURL: '/wp/v2/users',
 		plural: 'users',
 	},
-	{ name: 'user', kind: 'root', baseURL: '/wp/v2/users', plural: 'users' },
 	{
 		name: 'menu',
 		kind: 'root',
@@ -79,7 +78,7 @@ export const defaultEntities = [
 		baseURL: '/wp/v2/comments',
 		plural: 'comments',
 		label: __( 'Comment' ),
-	}
+	},
 ];
 
 export const kinds = [
