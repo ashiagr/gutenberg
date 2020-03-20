@@ -349,6 +349,24 @@ describe( 'Navigation', () => {
 			// Snapshot should contain the mocked menu items.
 			expect( await getEditedPostContent() ).toMatchSnapshot();
 		} );
+
+		it( 'does not display option to create from existing menus if there are no menus', async () => {
+			// Force no Menus to be returned by API response.
+			await mockAllMenusResponses( [] );
+
+			// Add the navigation block.
+			await insertBlock( 'Navigation' );
+
+			// Attempt to find the create Menu button
+			const [ createFromExistingButton ] = await page.$x(
+				'//button[text()="Create from Menu"][not(@disabled)]'
+			);
+
+			expect( createFromExistingButton ).toBeFalsy();
+
+			// Snapshot should contain the mocked menu items.
+			expect( await getEditedPostContent() ).toMatchSnapshot();
+		} );
 	} );
 
 	it( 'allows a navigation block to be created from an empty menu using a mixture of internal and external links', async () => {

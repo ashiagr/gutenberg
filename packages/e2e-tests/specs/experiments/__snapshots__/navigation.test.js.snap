@@ -22,6 +22,8 @@ exports[`Navigation Creating from existing Menus creates an empty navigation blo
 <!-- /wp:navigation -->"
 `;
 
+exports[`Navigation Creating from existing Menus does not display option to create from existing menus if there are no menus 1`] = `"<!-- wp:navigation /-->"`;
+
 exports[`Navigation allows a navigation block to be created from an empty menu using a mixture of internal and external links 1`] = `
 "<!-- wp:navigation -->
 <!-- wp:navigation-link {\\"label\\":\\"WP\\",\\"id\\":\\"https://wordpress.org\\",\\"url\\":\\"https://wordpress.org\\"} /-->
