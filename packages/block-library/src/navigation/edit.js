@@ -220,7 +220,7 @@ function Navigation( {
 							{ __( 'Create from all top-level pages' ) }
 						</Button>
 
-						{ !! hasMenus && (
+						{ !! hasMenus && selectedMenu && (
 							<>
 								<SelectControl
 									label={ __( 'Create from existing Menu' ) }
