@@ -240,7 +240,7 @@ afterEach( async () => {
 	await setUpResponseMocking( [] );
 } );
 describe( 'Navigation', () => {
-	it( 'allows a navigation menu to be created using existing pages', async () => {
+	it( 'allows a navigation block to be created using existing pages', async () => {
 		// Mock the response from the Pages endpoint. This is done so that the pages returned are always
 		// consistent and to test the feature more rigorously than the single default sample page.
 		await mockPagesResponse( [
@@ -276,7 +276,7 @@ describe( 'Navigation', () => {
 	} );
 
 	describe( 'Creating from existing Menus', () => {
-		it( 'allows a navigation menu to be created from existing menus', async () => {
+		it( 'allows a navigation block to be created from existing menus', async () => {
 			await mockAllMenusResponses();
 
 			// Add the navigation block.
@@ -306,7 +306,7 @@ describe( 'Navigation', () => {
 		} );
 	} );
 
-	it( 'allows a navigation menu to be created from an empty menu using a mixture of internal and external links', async () => {
+	it( 'allows a navigation block to be created from an empty menu using a mixture of internal and external links', async () => {
 		// Add the navigation block.
 		await insertBlock( 'Navigation' );
 
