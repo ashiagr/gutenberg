@@ -167,6 +167,11 @@ function Navigation( {
 	}
 
 	function handleCreateFromMenu() {
+		// If the selected Menu has no items then just create an empty Nav Block
+		if ( ! createFromMenu || ! createFromMenu.length ) {
+			return handleCreateEmpty();
+		}
+
 		updateNavItemBlocks( createFromMenu );
 		selectBlock( clientId );
 	}
