@@ -54,55 +54,61 @@ async function mockSearchResponse( items ) {
 	] );
 }
 
+const menusFixture = [
+	{
+		name: '2',
+		slug: 'test-menu-1',
+	},
+	{
+		name: 'Test Menu 2',
+		slug: 'test-menu-2',
+	},
+	{
+		name: 'Test Menu 3',
+		slug: 'test-menu-3',
+	},
+];
+
+const menuItemsFixture = [
+	{
+		title: 'Menu Item 1',
+		slug: 'menu-item-1',
+	},
+	{
+		title: 'Menu Item 2',
+		slug: 'menu-item-2',
+	},
+	{
+		title: 'Menu Item 3',
+		slug: 'menu-item-3',
+	},
+	{
+		title: 'Menu Item 4',
+		slug: 'menu-item-4',
+	},
+	{
+		title: 'Menu Item 5',
+		slug: 'menu-item-5',
+	},
+	{
+		title: 'Menu Item 6',
+		slug: 'menu-item-6',
+	},
+];
+
 /**
  * Creates mocked REST API responses for calls to menus and menu-items
  * endpoints.
  * Note: this needs to be within a single call to
  * `setUpResponseMocking` as you can only setup response mocking once per test run.
+ *
+ * @param {Array} menus menus to provide as mocked responses to menus entity API requests.
+ * @param {Array} menuItems menu items to provide as mocked responses to menu-items entity API requests.
  */
-async function mockAllMenusResponses() {
-	const menus = [
-		{
-			name: '2',
-			slug: 'test-menu-1',
-		},
-		{
-			name: 'Test Menu 2',
-			slug: 'test-menu-2',
-		},
-		{
-			name: 'Test Menu 3',
-			slug: 'test-menu-3',
-		},
-	];
-
-	const menuItems = [
-		{
-			title: 'Menu Item 1',
-			slug: 'menu-item-1',
-		},
-		{
-			title: 'Menu Item 2',
-			slug: 'menu-item-2',
-		},
-		{
-			title: 'Menu Item 3',
-			slug: 'menu-item-3',
-		},
-		{
-			title: 'Menu Item 4',
-			slug: 'menu-item-4',
-		},
-		{
-			title: 'Menu Item 5',
-			slug: 'menu-item-5',
-		},
-		{
-			title: 'Menu Item 6',
-			slug: 'menu-item-6',
-		},
-	];
-
+async function mockAllMenusResponses(
+	menus = menusFixture,
+	menuItems = menuItemsFixture
+) {
 	const mappedMenus = menus.map( ( menu, index ) => ( {
 		...menu,
 		id: index + 1,
@@ -270,7 +276,7 @@ describe( 'Navigation', () => {
 	} );
 
 	describe( 'Creating from existing Menus', () => {
-		it( 'allows a navigation menu to be created using existing menus', async () => {
+		it( 'allows a navigation menu to be created from existing menus', async () => {
 			await mockAllMenusResponses();
 
 			// Add the navigation block.
