@@ -54,42 +54,60 @@ async function mockSearchResponse( items ) {
 	] );
 }
 
-async function mockMenusResponse() {
+/**
+ * Creates mocked REST API responses for calls to menus and menu-items
+ * endpoints.
+ * Note: this needs to be within a single call to
+ * `setUpResponseMocking` as you can only setup response mocking once per test run.
+ */
+async function mockAllMenusResponses() {
 	const menus = [
 		{
-			name: 'Test Menu 1',
+			name: '2',
 			slug: 'test-menu-1',
 		},
+		{
+			name: 'Test Menu 2',
+			slug: 'test-menu-2',
+		},
+		{
+			name: 'Test Menu 3',
+			slug: 'test-menu-3',
+		},
 	];
+
+	const menuItems = [
+		{
+			title: 'Menu Item 1',
+			slug: 'menu-item-1',
+		},
+		{
+			title: 'Menu Item 2',
+			slug: 'menu-item-2',
+		},
+		{
+			title: 'Menu Item 3',
+			slug: 'menu-item-3',
+		},
+		{
+			title: 'Menu Item 4',
+			slug: 'menu-item-4',
+		},
+		{
+			title: 'Menu Item 5',
+			slug: 'menu-item-5',
+		},
+		{
+			title: 'Menu Item 6',
+			slug: 'menu-item-6',
+		},
+	];
+
 	const mappedMenus = menus.map( ( menu, index ) => ( {
 		...menu,
 		id: index + 1,
 	} ) );
 
-	await setUpResponseMocking( [
-		{
-			match: ( request ) => {
-				const isMatch = request
-					.url()
-					.includes(
-						`rest_route=${ encodeURIComponent(
-							'/__experimental/menus'
-						) }`
-					);
-				return isMatch;
-			},
-			onRequestMatch: createJSONResponse( mappedMenus ),
-		},
-	] );
-}
-
-async function mockMenuItemsResponse() {
-	const menuItems = [
-		{
-			title: 'Test Menu 1',
-			slug: 'test-menu-1',
-		},
-	];
 	const mappedMenuItems = menuItems.map( ( menuItem, index ) => ( {
 		id: index + 1,
 		title: {
@@ -110,14 +128,29 @@ async function mockMenuItemsResponse() {
 	await setUpResponseMocking( [
 		{
 			match: ( request ) => {
-				const isMatch = request
+				const isMenusMatch = request
+					.url()
+					.includes(
+						`rest_route=${ encodeURIComponent(
+							'/__experimental/menus'
+						) }`
+					);
+
+				return isMenusMatch;
+			},
+			onRequestMatch: createJSONResponse( mappedMenus ),
+		},
+		{
+			match: ( request ) => {
+				const isMenuItemsMatch = request
 					.url()
 					.includes(
 						`rest_route=${ encodeURIComponent(
 							'/__experimental/menu-items'
 						) }`
 					);
-				return isMatch;
+
+				return isMenuItemsMatch;
 			},
 			onRequestMatch: createJSONResponse( mappedMenuItems ),
 		},
@@ -238,25 +271,31 @@ describe( 'Navigation', () => {
 
 	describe( 'Creating from existing Menus', () => {
 		it( 'allows a navigation menu to be created using existing menus', async () => {
-			await mockMenuItemsResponse();
-			await mockMenusResponse();
+			await mockAllMenusResponses();
 
 			// Add the navigation block.
 			await insertBlock( 'Navigation' );
 
-			// Create an empty nav block. The 'create' button is disabled until pages are loaded,
-			// so we must wait for it to become not-disabled.
-			await page.waitForXPath(
-				'//button[text()="Create from Menu"][not(@disabled)]'
-			);
+			// Create an empty nav block. The UI to create from Menus is disabled until Menus are loaded,
+			// so we must wait for it to be available
+			await page.waitForXPath( '//option[text()="Test Menu 2"]' );
+
+			// Check the label is present so we can grab it's corresponding select dropdown
+			// const [ menuSelectLabel ] = await page.$x(
+			// 	'//label[text()="Create from existing Menu"]'
+			// );
+
+			// const selectElementId = await page.evaluate( ( theLabelEl ) => {
+			// 	return theLabelEl.getAttribute( 'for' );
+			// }, menuSelectLabel );
+
 			const [ createFromExistingButton ] = await page.$x(
 				'//button[text()="Create from Menu"][not(@disabled)]'
 			);
+
 			await createFromExistingButton.click();
 
-			// await page.waitFor( 4000 );
-
-			// Snapshot should contain the mocked pages.
+			// Snapshot should contain the mocked menu items.
 			expect( await getEditedPostContent() ).toMatchSnapshot();
 		} );
 	} );

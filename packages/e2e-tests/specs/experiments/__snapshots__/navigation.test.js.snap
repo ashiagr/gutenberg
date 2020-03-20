@@ -2,25 +2,17 @@
 
 exports[`Navigation Creating from existing Menus allows a navigation menu to be created using existing menus 1`] = `
 "<!-- wp:navigation -->
-<!-- wp:navigation-link {\\"label\\":\\"Et et voluptatem eius nisi\\",\\"type\\":\\"post_type\\",\\"id\\":56} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Menu Item 1\\",\\"type\\":\\"post_type\\",\\"id\\":1} /-->
 
-<!-- wp:navigation-link {\\"label\\":\\"Suscipit tenetur aut voluptates sit non\\",\\"type\\":\\"post_type\\",\\"id\\":57} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Menu Item 2\\",\\"type\\":\\"post_type\\",\\"id\\":2} /-->
 
-<!-- wp:navigation-link {\\"label\\":\\"Aut velit amet odit vel velit nemo\\",\\"type\\":\\"post_type\\",\\"id\\":58} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Menu Item 3\\",\\"type\\":\\"post_type\\",\\"id\\":3} /-->
 
-<!-- wp:navigation-link {\\"label\\":\\"Repellat vel sit accusantium\\",\\"type\\":\\"post_type\\",\\"id\\":59} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Menu Item 4\\",\\"type\\":\\"post_type\\",\\"id\\":4} /-->
 
-<!-- wp:navigation-link {\\"label\\":\\"Doloribus et illo fugit est ut\\",\\"type\\":\\"post_type\\",\\"id\\":60} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Menu Item 5\\",\\"type\\":\\"post_type\\",\\"id\\":5} /-->
 
-<!-- wp:navigation-link {\\"label\\":\\"Quis consectetur enim necessitatibus placeat\\",\\"type\\":\\"post_type\\",\\"id\\":61} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Eaque ab necessitatibus rerum recusandae molestiae iste\\",\\"type\\":\\"post_type\\",\\"id\\":62} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Deserunt optio tenetur illum sunt\\",\\"type\\":\\"post_type\\",\\"id\\":63} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Quod et aut quae eum\\",\\"type\\":\\"post_type\\",\\"id\\":64} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Aliquam quisquam asperiores quas\\",\\"type\\":\\"post_type\\",\\"id\\":65} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Menu Item 6\\",\\"type\\":\\"post_type\\",\\"id\\":6} /-->
 <!-- /wp:navigation -->"
 `;
 
@@ -29,30 +21,6 @@ exports[`Navigation allows a navigation menu to be created from an empty menu us
 <!-- wp:navigation-link {\\"label\\":\\"WP\\",\\"id\\":\\"https://wordpress.org\\",\\"url\\":\\"https://wordpress.org\\"} /-->
 
 <!-- wp:navigation-link {\\"label\\":\\"Contact\\",\\"id\\":1,\\"url\\":\\"https://this/is/a/test/search/get-in-touch\\"} /-->
-<!-- /wp:navigation -->"
-`;
-
-exports[`Navigation allows a navigation menu to be created using existing menus 1`] = `
-"<!-- wp:navigation -->
-<!-- wp:navigation-link {\\"label\\":\\"Et et voluptatem eius nisi\\",\\"type\\":\\"post_type\\",\\"id\\":56} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Suscipit tenetur aut voluptates sit non\\",\\"type\\":\\"post_type\\",\\"id\\":57} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Aut velit amet odit vel velit nemo\\",\\"type\\":\\"post_type\\",\\"id\\":58} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Repellat vel sit accusantium\\",\\"type\\":\\"post_type\\",\\"id\\":59} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Doloribus et illo fugit est ut\\",\\"type\\":\\"post_type\\",\\"id\\":60} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Quis consectetur enim necessitatibus placeat\\",\\"type\\":\\"post_type\\",\\"id\\":61} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Eaque ab necessitatibus rerum recusandae molestiae iste\\",\\"type\\":\\"post_type\\",\\"id\\":62} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Deserunt optio tenetur illum sunt\\",\\"type\\":\\"post_type\\",\\"id\\":63} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Quod et aut quae eum\\",\\"type\\":\\"post_type\\",\\"id\\":64} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Aliquam quisquam asperiores quas\\",\\"type\\":\\"post_type\\",\\"id\\":65} /-->
 <!-- /wp:navigation -->"
 `;
 
