@@ -56,7 +56,7 @@ async function mockSearchResponse( items ) {
 
 const menusFixture = [
 	{
-		name: '2',
+		name: 'Test Menu 1',
 		slug: 'test-menu-1',
 	},
 	{
@@ -109,27 +109,31 @@ async function mockAllMenusResponses(
 	menus = menusFixture,
 	menuItems = menuItemsFixture
 ) {
-	const mappedMenus = menus.map( ( menu, index ) => ( {
-		...menu,
-		id: index + 1,
-	} ) );
+	const mappedMenus = menus.length
+		? menus.map( ( menu, index ) => ( {
+				...menu,
+				id: index + 1,
+		  } ) )
+		: [];
 
-	const mappedMenuItems = menuItems.map( ( menuItem, index ) => ( {
-		id: index + 1,
-		title: {
-			raw: menuItem.title,
-			rendered: menuItem.title,
-		},
-		status: 'publish',
-		url: `https://this/is/a/test/menu/page/${ menuItem.slug }`,
-		attr_title: '',
-		description: '',
-		type: 'post_type',
-		type_label: 'Post',
-		object: 'post',
-		parent: 0,
-		menu_order: index + 1,
-	} ) );
+	const mappedMenuItems = menuItems.length
+		? menuItems.map( ( menuItem, index ) => ( {
+				id: index + 1,
+				title: {
+					raw: menuItem.title,
+					rendered: menuItem.title,
+				},
+				status: 'publish',
+				url: `https://this/is/a/test/menu/page/${ menuItem.slug }`,
+				attr_title: '',
+				description: '',
+				type: 'post_type',
+				type_label: 'Post',
+				object: 'post',
+				parent: 0,
+				menu_order: index + 1,
+		  } ) )
+		: [];
 
 	await setUpResponseMocking( [
 		{
@@ -300,6 +304,34 @@ describe( 'Navigation', () => {
 			);
 
 			await createFromExistingButton.click();
+
+			// Snapshot should contain the mocked menu items.
+			expect( await getEditedPostContent() ).toMatchSnapshot();
+		} );
+
+		it( 'creates an empty navigation block when the selected existing menu is also empty', async () => {
+			const emptyMenuItems = [];
+			await mockAllMenusResponses( menusFixture, emptyMenuItems );
+
+			// Add the navigation block.
+			await insertBlock( 'Navigation' );
+
+			// Create an empty nav block. The UI to create from Menus is disabled until Menus are loaded,
+			// so we must wait for it to be available
+			await page.waitForXPath( '//option[text()="Test Menu 1"]' );
+
+			const [ createFromExistingButton ] = await page.$x(
+				'//button[text()="Create from Menu"][not(@disabled)]'
+			);
+
+			await createFromExistingButton.click();
+
+			const navBlockItems = await page.$$(
+				'li[aria-label="Block: Navigation Link"]'
+			);
+
+			// We expect 1 because a "placeholder" Nav Item Block is automatically inserted
+			expect( navBlockItems ).toHaveLength( 1 );
 
 			// Snapshot should contain the mocked menu items.
 			expect( await getEditedPostContent() ).toMatchSnapshot();
