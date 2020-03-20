@@ -305,6 +305,16 @@ describe( 'Navigation', () => {
 
 			await createFromExistingButton.click();
 
+			// Scope element selector to the "Editor content" as otherwise it picks up on
+			// Block Style live previews.
+			const navBlockItemsLength = await page.$$eval(
+				'[aria-label="Editor content"] li[aria-label="Block: Navigation Link"]',
+				( els ) => els.length
+			);
+
+			// We expect 1 because a "placeholder" Nav Item Block is automatically inserted
+			expect( navBlockItemsLength ).toEqual( menuItemsFixture.length );
+
 			// Snapshot should contain the mocked menu items.
 			expect( await getEditedPostContent() ).toMatchSnapshot();
 		} );
@@ -326,12 +336,15 @@ describe( 'Navigation', () => {
 
 			await createFromExistingButton.click();
 
-			const navBlockItems = await page.$$(
-				'li[aria-label="Block: Navigation Link"]'
+			// Scope element selector to the "Editor content" as otherwise it picks up on
+			// Block Style live previews.
+			const navBlockItemsLength = await page.$$eval(
+				'[aria-label="Editor content"] li[aria-label="Block: Navigation Link"]',
+				( els ) => els.length
 			);
 
 			// We expect 1 because a "placeholder" Nav Item Block is automatically inserted
-			expect( navBlockItems ).toHaveLength( 1 );
+			expect( navBlockItemsLength ).toEqual( 1 );
 
 			// Snapshot should contain the mocked menu items.
 			expect( await getEditedPostContent() ).toMatchSnapshot();
