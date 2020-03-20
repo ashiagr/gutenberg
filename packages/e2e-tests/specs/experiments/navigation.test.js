@@ -54,6 +54,76 @@ async function mockSearchResponse( items ) {
 	] );
 }
 
+async function mockMenusResponse() {
+	const menus = [
+		{
+			name: 'Test Menu 1',
+			slug: 'test-menu-1',
+		},
+	];
+	const mappedMenus = menus.map( ( menu, index ) => ( {
+		...menu,
+		id: index + 1,
+	} ) );
+
+	await setUpResponseMocking( [
+		{
+			match: ( request ) => {
+				const isMatch = request
+					.url()
+					.includes(
+						`rest_route=${ encodeURIComponent(
+							'/__experimental/menus'
+						) }`
+					);
+				return isMatch;
+			},
+			onRequestMatch: createJSONResponse( mappedMenus ),
+		},
+	] );
+}
+
+async function mockMenuItemsResponse() {
+	const menuItems = [
+		{
+			title: 'Test Menu 1',
+			slug: 'test-menu-1',
+		},
+	];
+	const mappedMenuItems = menuItems.map( ( menuItem, index ) => ( {
+		id: index + 1,
+		title: {
+			raw: menuItem.title,
+			rendered: menuItem.title,
+		},
+		status: 'publish',
+		url: `https://this/is/a/test/menu/page/${ menuItem.slug }`,
+		attr_title: '',
+		description: '',
+		type: 'post_type',
+		type_label: 'Post',
+		object: 'post',
+		parent: 0,
+		menu_order: index + 1,
+	} ) );
+
+	await setUpResponseMocking( [
+		{
+			match: ( request ) => {
+				const isMatch = request
+					.url()
+					.includes(
+						`rest_route=${ encodeURIComponent(
+							'/__experimental/menu-items'
+						) }`
+					);
+				return isMatch;
+			},
+			onRequestMatch: createJSONResponse( mappedMenuItems ),
+		},
+	] );
+}
+
 async function mockCreatePageResponse( title, slug ) {
 	const page = {
 		id: 1,
@@ -123,15 +193,14 @@ async function updateActiveNavigationLink( { url, label, type } ) {
 	}
 }
 
+beforeEach( async () => {
+	await createNewPost();
+} );
+
+afterEach( async () => {
+	await setUpResponseMocking( [] );
+} );
 describe( 'Navigation', () => {
-	beforeEach( async () => {
-		await createNewPost();
-	} );
-
-	afterEach( async () => {
-		await setUpResponseMocking( [] );
-	} );
-
 	it( 'allows a navigation menu to be created using existing pages', async () => {
 		// Mock the response from the Pages endpoint. This is done so that the pages returned are always
 		// consistent and to test the feature more rigorously than the single default sample page.
@@ -165,6 +234,31 @@ describe( 'Navigation', () => {
 
 		// Snapshot should contain the mocked pages.
 		expect( await getEditedPostContent() ).toMatchSnapshot();
+	} );
+
+	describe( 'Creating from existing Menus', () => {
+		it( 'allows a navigation menu to be created using existing menus', async () => {
+			await mockMenuItemsResponse();
+			await mockMenusResponse();
+
+			// Add the navigation block.
+			await insertBlock( 'Navigation' );
+
+			// Create an empty nav block. The 'create' button is disabled until pages are loaded,
+			// so we must wait for it to become not-disabled.
+			await page.waitForXPath(
+				'//button[text()="Create from Menu"][not(@disabled)]'
+			);
+			const [ createFromExistingButton ] = await page.$x(
+				'//button[text()="Create from Menu"][not(@disabled)]'
+			);
+			await createFromExistingButton.click();
+
+			// await page.waitFor( 4000 );
+
+			// Snapshot should contain the mocked pages.
+			expect( await getEditedPostContent() ).toMatchSnapshot();
+		} );
 	} );
 
 	it( 'allows a navigation menu to be created from an empty menu using a mixture of internal and external links', async () => {
