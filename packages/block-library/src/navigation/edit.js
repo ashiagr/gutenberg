@@ -180,7 +180,7 @@ function Navigation( {
 	const hasMenus = hasResolvedMenus && menus && menus.length;
 
 	useEffect( () => {
-		if ( !! menus ) {
+		if ( !! menus && menus.length ) {
 			setSelectedMenu( menus[ 0 ].id );
 		}
 	}, [ menus ] );
