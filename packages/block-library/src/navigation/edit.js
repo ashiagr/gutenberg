@@ -126,7 +126,7 @@ function Navigation( {
 
 	const menuItems = getMenuItems( selectedMenu );
 
-	const createFromMenu = useMemo( () => {
+	const navLinkBlocksFromMenuItems = useMemo( () => {
 		if ( ! menuItems ) {
 			return null;
 		}
@@ -168,11 +168,14 @@ function Navigation( {
 
 	function handleCreateFromMenu() {
 		// If the selected Menu has no items then just create an empty Nav Block
-		if ( ! createFromMenu || ! createFromMenu.length ) {
+		if (
+			! navLinkBlocksFromMenuItems ||
+			! navLinkBlocksFromMenuItems.length
+		) {
 			return handleCreateEmpty();
 		}
 
-		updateNavItemBlocks( createFromMenu );
+		updateNavItemBlocks( navLinkBlocksFromMenuItems );
 		selectBlock( clientId );
 	}
 
