@@ -40,9 +40,16 @@ export default compose( [
 					return;
 				}
 
+				const { target } = event;
+				const { ownerDocument } = target;
+				const { defaultView } = ownerDocument;
+
 				// Always handle multiple selected blocks.
 				// Let native copy behaviour take over in input fields.
-				if ( ! hasMultiSelection() && documentHasSelection() ) {
+				if (
+					! hasMultiSelection() &&
+					documentHasSelection( defaultView )
+				) {
 					return;
 				}
 

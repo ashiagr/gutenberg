@@ -44,12 +44,6 @@ import {
 import FocusCapture from './focus-capture';
 
 /**
- * Browser constants
- */
-
-const { getSelection, getComputedStyle } = window;
-
-/**
  * Given an element, returns true if the element is a tabbable text field, or
  * false otherwise.
  *
@@ -434,6 +428,9 @@ export default function WritingFlow( { children } ) {
 			return;
 		}
 
+		const { ownerDocument } = target;
+		const { defaultView } = ownerDocument;
+
 		// When presing any key other than up or down, the initial vertical
 		// position must ALWAYS be reset. The vertical position is saved so it
 		// can be restored as well as possible on sebsequent vertical arrow key
@@ -443,7 +440,7 @@ export default function WritingFlow( { children } ) {
 		if ( ! isVertical ) {
 			verticalRect.current = null;
 		} else if ( ! verticalRect.current ) {
-			verticalRect.current = computeCaretRect();
+			verticalRect.current = computeCaretRect( defaultView );
 		}
 
 		// This logic inside this condition needs to be checked before
@@ -492,7 +489,7 @@ export default function WritingFlow( { children } ) {
 
 		// In the case of RTL scripts, right means previous and left means next,
 		// which is the exact reverse of LTR.
-		const { direction } = getComputedStyle( target );
+		const { direction } = defaultView.getComputedStyle( target );
 		const isReverseDir = direction === 'rtl' ? ! isReverse : isReverse;
 
 		if ( isShift ) {
@@ -530,7 +527,7 @@ export default function WritingFlow( { children } ) {
 			}
 		} else if (
 			isHorizontal &&
-			getSelection().isCollapsed &&
+			defaultView.getSelection().isCollapsed &&
 			isHorizontalEdge( target, isReverseDir )
 		) {
 			const closestTabbable = getClosestTabbable(

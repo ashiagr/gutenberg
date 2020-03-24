@@ -4,18 +4,6 @@
 import { includes } from 'lodash';
 
 /**
- * Browser dependencies
- */
-
-const { DOMParser, getComputedStyle } = window;
-const {
-	TEXT_NODE,
-	ELEMENT_NODE,
-	DOCUMENT_POSITION_PRECEDING,
-	DOCUMENT_POSITION_FOLLOWING,
-} = window.Node;
-
-/**
  * Returns true if the given selection object is in the forward direction, or
  * false otherwise.
  *
@@ -35,11 +23,11 @@ function isSelectionForward( selection ) {
 	/* eslint-disable no-bitwise */
 	// Compare whether anchor node precedes focus node. If focus node (where
 	// end of selection occurs) is after the anchor node, it is forward.
-	if ( position & DOCUMENT_POSITION_PRECEDING ) {
+	if ( position & anchorNode.DOCUMENT_POSITION_PRECEDING ) {
 		return false;
 	}
 
-	if ( position & DOCUMENT_POSITION_FOLLOWING ) {
+	if ( position & anchorNode.DOCUMENT_POSITION_FOLLOWING ) {
 		return true;
 	}
 	/* eslint-enable no-bitwise */
@@ -158,7 +146,12 @@ function isEdge( container, isReverse, onlyVertical ) {
 	const y = isReverse
 		? containerRect.top + buffer
 		: containerRect.bottom - buffer;
-	const testRange = hiddenCaretRangeFromPoint( document, x, y, container );
+	const testRange = hiddenCaretRangeFromPoint(
+		ownerDocument,
+		x,
+		y,
+		container
+	);
 
 	if ( ! testRange ) {
 		return false;
@@ -247,9 +240,11 @@ export function getRectangleFromRange( range ) {
 /**
  * Get the rectangle for the selection in a container.
  *
+ * @param {Window} window The window of the selection.
+ *
  * @return {?DOMRect} The rectangle.
  */
-export function computeCaretRect() {
+export function computeCaretRect( window ) {
 	const selection = window.getSelection();
 	const range = selection.rangeCount ? selection.getRangeAt( 0 ) : null;
 
@@ -318,9 +313,9 @@ export function placeCaretAtHorizontalEdge( container, isReverse ) {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/caretRangeFromPoint
  *
- * @param {Document} doc The document of the range.
- * @param {number}    x   Horizontal position within the current viewport.
- * @param {number}    y   Vertical position within the current viewport.
+ * @param {Document} doc  The document of the range.
+ * @param {number}   x    Horizontal position within the current viewport.
+ * @param {number}   y    Vertical position within the current viewport.
  *
  * @return {?Range} The best range for the given point.
  */
@@ -481,10 +476,12 @@ export function isTextField( element ) {
  * Check wether the current document has a selection.
  * This checks both for focus in an input field and general text selection.
  *
+ * @param {Window} window The window of the selection.
+ *
  * @return {boolean} True if there is selection, false if not.
  */
-export function documentHasSelection() {
-	if ( isTextField( document.activeElement ) ) {
+export function documentHasSelection( window ) {
+	if ( isTextField( window.document.activeElement ) ) {
 		return true;
 	}
 
@@ -536,7 +533,7 @@ export function isEntirelySelected( element ) {
 
 	const lastChild = element.lastChild;
 	const lastChildContentLength =
-		lastChild.nodeType === TEXT_NODE
+		lastChild.nodeType === lastChild.TEXT_NODE
 			? lastChild.data.length
 			: lastChild.childNodes.length;
 
@@ -591,7 +588,7 @@ export function getOffsetParent( node ) {
 	// an element node, so find the closest element node.
 	let closestElement;
 	while ( ( closestElement = node.parentNode ) ) {
-		if ( closestElement.nodeType === ELEMENT_NODE ) {
+		if ( closestElement.nodeType === closestElement.ELEMENT_NODE ) {
 			break;
 		}
 	}
@@ -600,9 +597,14 @@ export function getOffsetParent( node ) {
 		return null;
 	}
 
+	const { ownerDocument } = closestElement;
+	const { defaultView } = ownerDocument;
+
 	// If the closest element is already positioned, return it, as offsetParent
 	// does not otherwise consider the node itself.
-	if ( getComputedStyle( closestElement ).position !== 'static' ) {
+	if (
+		defaultView.getComputedStyle( closestElement ).position !== 'static'
+	) {
 		return closestElement;
 	}
 
@@ -699,6 +701,9 @@ export function wrap( newNode, referenceNode ) {
  * @return {string} The text content with any html removed.
  */
 export function __unstableStripHTML( html ) {
-	const document = new DOMParser().parseFromString( html, 'text/html' );
+	const document = new window.DOMParser().parseFromString(
+		html,
+		'text/html'
+	);
 	return document.body.textContent || '';
 }
