@@ -123,9 +123,10 @@ export default function InsertionPoint( {
 			return;
 		}
 
+		const { ownerDocument } = containerRef.current;
 		const targetRect = target.getBoundingClientRect();
 		const isReverse = clientY < targetRect.top + targetRect.height / 2;
-		const blockNode = getBlockDOMNode( inserterClientId );
+		const blockNode = getBlockDOMNode( inserterClientId, ownerDocument );
 		const container = isReverse ? containerRef.current : blockNode;
 		const closest =
 			getClosestTabbable( blockNode, true, container ) || blockNode;
