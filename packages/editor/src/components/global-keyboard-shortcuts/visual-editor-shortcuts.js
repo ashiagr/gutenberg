@@ -5,6 +5,7 @@ import { useShortcut } from '@wordpress/keyboard-shortcuts';
 import { useDispatch, useSelect } from '@wordpress/data';
 import deprecated from '@wordpress/deprecated';
 import { BlockEditorKeyboardShortcuts } from '@wordpress/block-editor';
+import { useRef } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -17,6 +18,7 @@ function VisualEditorGlobalKeyboardShortcuts() {
 		( select ) => select( 'core/editor' ).isEditedPostDirty,
 		[]
 	);
+	const ref = useRef();
 
 	useShortcut(
 		'core/editor/undo',
@@ -24,7 +26,7 @@ function VisualEditorGlobalKeyboardShortcuts() {
 			undo();
 			event.preventDefault();
 		},
-		{ bindGlobal: true }
+		{ bindGlobal: true, target: () => ref.current.ownerDocument }
 	);
 
 	useShortcut(
@@ -33,7 +35,7 @@ function VisualEditorGlobalKeyboardShortcuts() {
 			redo();
 			event.preventDefault();
 		},
-		{ bindGlobal: true }
+		{ bindGlobal: true, target: () => ref.current.ownerDocument }
 	);
 
 	useShortcut(
@@ -52,14 +54,14 @@ function VisualEditorGlobalKeyboardShortcuts() {
 
 			savePost();
 		},
-		{ bindGlobal: true }
+		{ bindGlobal: true, target: () => ref.current.ownerDocument }
 	);
 
 	return (
-		<>
+		<div ref={ ref }>
 			<BlockEditorKeyboardShortcuts />
 			<SaveShortcut />
-		</>
+		</div>
 	);
 }
 

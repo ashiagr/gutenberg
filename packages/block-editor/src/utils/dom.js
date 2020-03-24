@@ -12,8 +12,8 @@ export function getBlockDOMNode( clientId, scope = document ) {
 	return scope.getElementById( 'block-' + clientId );
 }
 
-export function getBlockPreviewContainerDOMNode( clientId ) {
-	const domNode = getBlockDOMNode( clientId );
+export function getBlockPreviewContainerDOMNode( clientId, scope ) {
+	const domNode = getBlockDOMNode( clientId, scope );
 
 	if ( ! domNode ) {
 		return;

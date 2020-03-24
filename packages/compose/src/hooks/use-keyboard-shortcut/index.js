@@ -3,7 +3,7 @@
  */
 import Mousetrap from 'mousetrap';
 import 'mousetrap/plugins/global-bind/mousetrap-global-bind';
-import { includes, castArray } from 'lodash';
+import { includes, castArray, isFunction } from 'lodash';
 
 /**
  * WordPress dependencies
@@ -58,7 +58,18 @@ function useKeyboardShortcut(
 		if ( isDisabled ) {
 			return;
 		}
-		const mousetrap = new Mousetrap( target ? target.current : document );
+
+		let node = document;
+
+		if ( target ) {
+			if ( isFunction( target ) ) {
+				node = target();
+			} else {
+				node = target.current;
+			}
+		}
+
+		const mousetrap = new Mousetrap( node );
 		castArray( shortcuts ).forEach( ( shortcut ) => {
 			const keys = shortcut.split( '+' );
 			// Determines whether a key is a modifier by the length of the string.

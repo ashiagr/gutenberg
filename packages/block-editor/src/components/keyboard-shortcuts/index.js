@@ -5,7 +5,7 @@ import { first, last } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { useEffect, useCallback } from '@wordpress/element';
+import { useEffect, useCallback, useRef } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useShortcut } from '@wordpress/keyboard-shortcuts';
 import { __ } from '@wordpress/i18n';
@@ -21,6 +21,7 @@ function KeyboardShortcuts() {
 			rootBlocksClientIds: getBlockOrder(),
 		};
 	}, [] );
+	const ref = useRef();
 
 	const {
 		duplicateBlocks,
@@ -42,7 +43,11 @@ function KeyboardShortcuts() {
 			},
 			[ clientIds, duplicateBlocks ]
 		),
-		{ bindGlobal: true, isDisabled: clientIds.length === 0 }
+		{
+			bindGlobal: true,
+			isDisabled: clientIds.length === 0,
+			target: () => ref.current.ownerDocument,
+		}
 	);
 
 	// Does not clash with any known browser/native shortcuts, but preventDefault
@@ -56,7 +61,11 @@ function KeyboardShortcuts() {
 			},
 			[ clientIds, removeBlocks ]
 		),
-		{ bindGlobal: true, isDisabled: clientIds.length === 0 }
+		{
+			bindGlobal: true,
+			isDisabled: clientIds.length === 0,
+			target: () => ref.current.ownerDocument,
+		}
 	);
 
 	// Does not clash with any known browser/native shortcuts, but preventDefault
@@ -70,7 +79,11 @@ function KeyboardShortcuts() {
 			},
 			[ clientIds, insertAfterBlock ]
 		),
-		{ bindGlobal: true, isDisabled: clientIds.length === 0 }
+		{
+			bindGlobal: true,
+			isDisabled: clientIds.length === 0,
+			target: () => ref.current.ownerDocument,
+		}
 	);
 
 	// Prevent 'view recently closed tabs' in Opera using preventDefault.
@@ -83,7 +96,11 @@ function KeyboardShortcuts() {
 			},
 			[ clientIds, insertBeforeBlock ]
 		),
-		{ bindGlobal: true, isDisabled: clientIds.length === 0 }
+		{
+			bindGlobal: true,
+			isDisabled: clientIds.length === 0,
+			target: () => ref.current.ownerDocument,
+		}
 	);
 
 	useShortcut(
@@ -95,7 +112,10 @@ function KeyboardShortcuts() {
 			},
 			[ clientIds, removeBlocks ]
 		),
-		{ isDisabled: clientIds.length < 1 }
+		{
+			isDisabled: clientIds.length < 1,
+			target: () => ref.current.ownerDocument,
+		}
 	);
 
 	useShortcut(
@@ -109,7 +129,10 @@ function KeyboardShortcuts() {
 				);
 			},
 			[ rootBlocksClientIds, multiSelect ]
-		)
+		),
+		{
+			target: () => ref.current.ownerDocument,
+		}
 	);
 
 	useShortcut(
@@ -122,10 +145,13 @@ function KeyboardShortcuts() {
 			},
 			[ clientIds, clearSelectedBlock ]
 		),
-		{ isDisabled: clientIds.length < 2 }
+		{
+			isDisabled: clientIds.length < 2,
+			target: () => ref.current.ownerDocument,
+		}
 	);
 
-	return null;
+	return <div ref={ ref } />;
 }
 
 function KeyboardShortcutsRegister() {
