@@ -139,9 +139,11 @@ function KeyboardShortcuts() {
 		'core/block-editor/unselect',
 		useCallback(
 			( event ) => {
+				const { ownerDocument } = event.target;
+				const { defaultView } = ownerDocument;
 				event.preventDefault();
 				clearSelectedBlock();
-				window.getSelection().removeAllRanges();
+				defaultView.getSelection().removeAllRanges();
 			},
 			[ clientIds, clearSelectedBlock ]
 		),
