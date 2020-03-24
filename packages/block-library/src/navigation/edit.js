@@ -47,6 +47,7 @@ import useBlockNavigator from './use-block-navigator';
 import BlockNavigationList from './block-navigation-list';
 import BlockColorsStyleSelector from './block-colors-selector';
 import * as navIcons from './icons';
+import createDataTree from './create-data-tree';
 
 function Navigation( {
 	attributes,
@@ -129,29 +130,6 @@ function Navigation( {
 	const navLinkBlocksFromMenuItems = useMemo( () => {
 		if ( ! menuItems ) {
 			return null;
-		}
-
-		function createDataTree( dataset ) {
-			const hashTable = Object.create( null );
-			const dataTree = [];
-
-			dataset.forEach( ( data ) => {
-				hashTable[ data.id ] = {
-					...data,
-					children: [],
-				};
-			} );
-
-			dataset.forEach( ( data ) => {
-				if ( data.parent ) {
-					hashTable[ data.parent ].children.push(
-						hashTable[ data.id ]
-					);
-				} else {
-					dataTree.push( hashTable[ data.id ] );
-				}
-			} );
-			return dataTree;
 		}
 
 		function initialiseBlocks( nodes ) {
