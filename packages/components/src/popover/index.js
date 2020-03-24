@@ -61,12 +61,30 @@ function computeAnchorRect(
 			return;
 		}
 
-		if ( anchorRef instanceof window.Range ) {
+		if ( anchorRef.endContainer ) {
 			return getRectangleFromRange( anchorRef );
 		}
 
-		if ( anchorRef instanceof window.Element ) {
-			const rect = anchorRef.getBoundingClientRect();
+		const { ownerDocument } = anchorRef;
+
+		if ( ownerDocument ) {
+			let rect = anchorRef.getBoundingClientRect();
+
+			if ( ownerDocument !== document ) {
+				const iframe = Array.from(
+					document.querySelectorAll( 'iframe' )
+				).find( ( element ) => {
+					return element.contentDocument === ownerDocument;
+				} );
+				const iframeRect = iframe.getBoundingClientRect();
+
+				rect = new window.DOMRect(
+					rect.left + iframeRect.left,
+					rect.top + iframeRect.top,
+					rect.width,
+					rect.height
+				);
+			}
 
 			if ( shouldAnchorIncludePadding ) {
 				return rect;
@@ -445,6 +463,16 @@ const Popover = ( {
 		window.addEventListener( 'click', refreshOnAnimationFrame );
 		window.addEventListener( 'resize', refresh );
 		window.addEventListener( 'scroll', refresh, true );
+
+		Array.from( document.querySelectorAll( 'iframe' ) ).forEach(
+			( element ) => {
+				element.contentWindow.addEventListener(
+					'scroll',
+					refresh,
+					true
+				);
+			}
+		);
 
 		let observer;
 

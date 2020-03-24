@@ -8,8 +8,8 @@
  *
  * @return {Element} Block DOM node.
  */
-export function getBlockDOMNode( clientId ) {
-	return document.getElementById( 'block-' + clientId );
+export function getBlockDOMNode( clientId, scope = document ) {
+	return scope.getElementById( 'block-' + clientId );
 }
 
 export function getBlockPreviewContainerDOMNode( clientId ) {

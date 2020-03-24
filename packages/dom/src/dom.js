@@ -82,7 +82,10 @@ function isEdge( container, isReverse, onlyVertical ) {
 		return true;
 	}
 
-	const selection = window.getSelection();
+	const { ownerDocument } = container;
+	const { defaultView } = ownerDocument;
+
+	const selection = defaultView.getSelection();
 
 	if ( ! selection.rangeCount ) {
 		return false;
@@ -104,7 +107,7 @@ function isEdge( container, isReverse, onlyVertical ) {
 		return false;
 	}
 
-	const computedStyle = window.getComputedStyle( container );
+	const computedStyle = defaultView.getComputedStyle( container );
 	const lineHeight = parseInt( computedStyle.lineHeight, 10 ) || 0;
 
 	// Only consider the multiline selection at the edge if the direction is
@@ -208,6 +211,7 @@ export function getRectangleFromRange( range ) {
 	}
 
 	const { startContainer } = range;
+	const { ownerDocument } = startContainer;
 
 	// Correct invalid "BR" ranges. The cannot contain any children.
 	if ( startContainer.nodeName === 'BR' ) {
@@ -216,7 +220,7 @@ export function getRectangleFromRange( range ) {
 			startContainer
 		);
 
-		range = document.createRange();
+		range = ownerDocument.createRange();
 		range.setStart( parentNode, index );
 		range.setEnd( parentNode, index );
 	}
@@ -229,7 +233,7 @@ export function getRectangleFromRange( range ) {
 	//
 	// See: https://stackoverflow.com/a/6847328/995445
 	if ( ! rect ) {
-		const padNode = document.createTextNode( '\u200b' );
+		const padNode = ownerDocument.createTextNode( '\u200b' );
 		// Do not modify the live range.
 		range = range.cloneRange();
 		range.insertNode( padNode );
@@ -296,8 +300,10 @@ export function placeCaretAtHorizontalEdge( container, isReverse ) {
 		return;
 	}
 
-	const selection = window.getSelection();
-	const range = document.createRange();
+	const { ownerDocument } = container;
+	const { defaultView } = ownerDocument;
+	const selection = defaultView.getSelection();
+	const range = ownerDocument.createRange();
 
 	range.selectNodeContents( rangeTarget );
 	range.collapse( ! isReverse );
@@ -407,7 +413,9 @@ export function placeCaretAtVerticalEdge(
 		? editableRect.bottom - buffer
 		: editableRect.top + buffer;
 
-	const range = hiddenCaretRangeFromPoint( document, x, y, container );
+	const { ownerDocument } = container;
+	const { defaultView } = ownerDocument;
+	const range = hiddenCaretRangeFromPoint( ownerDocument, x, y, container );
 
 	if ( ! range || ! container.contains( range.startContainer ) ) {
 		if (
@@ -427,7 +435,7 @@ export function placeCaretAtVerticalEdge(
 		return;
 	}
 
-	const selection = window.getSelection();
+	const selection = defaultView.getSelection();
 	selection.removeAllRanges();
 	selection.addRange( range );
 	container.focus();
@@ -506,7 +514,9 @@ export function isEntirelySelected( element ) {
 		return true;
 	}
 
-	const selection = window.getSelection();
+	const { ownerDocument } = element;
+	const { defaultView } = ownerDocument;
+	const selection = defaultView.getSelection();
 	const range = selection.rangeCount ? selection.getRangeAt( 0 ) : null;
 
 	if ( ! range ) {
@@ -552,8 +562,10 @@ export function getScrollContainer( node ) {
 
 	// Scrollable if scrollable height exceeds displayed...
 	if ( node.scrollHeight > node.clientHeight ) {
+		const { ownerDocument } = node;
+		const { defaultView } = ownerDocument;
 		// ...except when overflow is defined to be hidden or visible
-		const { overflowY } = window.getComputedStyle( node );
+		const { overflowY } = defaultView.getComputedStyle( node );
 		if ( /(auto|scroll)/.test( overflowY ) ) {
 			return node;
 		}
