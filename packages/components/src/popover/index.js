@@ -37,6 +37,26 @@ const FocusManaged = withConstrainedTabbing(
  */
 const SLOT_NAME = 'Popover';
 
+function offsetIframe( rect, ownerDocument ) {
+	if ( ownerDocument !== document ) {
+		const iframe = Array.from( document.querySelectorAll( 'iframe' ) ).find(
+			( element ) => {
+				return element.contentDocument === ownerDocument;
+			}
+		);
+		const iframeRect = iframe.getBoundingClientRect();
+
+		rect = new window.DOMRect(
+			rect.left + iframeRect.left,
+			rect.top + iframeRect.top,
+			rect.width,
+			rect.height
+		);
+	}
+
+	return rect;
+}
+
 function computeAnchorRect(
 	anchorRefFallback,
 	anchorRect,
@@ -63,47 +83,19 @@ function computeAnchorRect(
 
 		if ( anchorRef.endContainer ) {
 			const { ownerDocument } = anchorRef.endContainer;
-			let rect = getRectangleFromRange( anchorRef );
-
-			if ( ownerDocument !== document ) {
-				const iframe = Array.from(
-					document.querySelectorAll( 'iframe' )
-				).find( ( element ) => {
-					return element.contentDocument === ownerDocument;
-				} );
-				const iframeRect = iframe.getBoundingClientRect();
-
-				rect = new window.DOMRect(
-					rect.left + iframeRect.left,
-					rect.top + iframeRect.top,
-					rect.width,
-					rect.height
-				);
-			}
-
-			return rect;
+			return offsetIframe(
+				getRectangleFromRange( anchorRef ),
+				ownerDocument
+			);
 		}
 
 		const { ownerDocument } = anchorRef;
 
 		if ( ownerDocument ) {
-			let rect = anchorRef.getBoundingClientRect();
-
-			if ( ownerDocument !== document ) {
-				const iframe = Array.from(
-					document.querySelectorAll( 'iframe' )
-				).find( ( element ) => {
-					return element.contentDocument === ownerDocument;
-				} );
-				const iframeRect = iframe.getBoundingClientRect();
-
-				rect = new window.DOMRect(
-					rect.left + iframeRect.left,
-					rect.top + iframeRect.top,
-					rect.width,
-					rect.height
-				);
-			}
+			const rect = offsetIframe(
+				anchorRef.getBoundingClientRect(),
+				ownerDocument
+			);
 
 			if ( shouldAnchorIncludePadding ) {
 				return rect;
@@ -115,12 +107,14 @@ function computeAnchorRect(
 		const { top, bottom } = anchorRef;
 		const topRect = top.getBoundingClientRect();
 		const bottomRect = bottom.getBoundingClientRect();
-		const rect = new window.DOMRect(
+		let rect = new window.DOMRect(
 			topRect.left,
 			topRect.top,
 			topRect.width,
 			bottomRect.bottom - topRect.top
 		);
+
+		rect = offsetIframe( rect, top.ownerDocument );
 
 		if ( shouldAnchorIncludePadding ) {
 			return rect;
