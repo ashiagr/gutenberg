@@ -130,17 +130,58 @@ function Navigation( {
 		if ( ! menuItems ) {
 			return null;
 		}
-		return menuItems.map( ( { title, type, link: url, id } ) =>
-			createBlock( 'core/navigation-link', {
-				type,
-				id,
-				url,
-				label: ! title.rendered
-					? __( '(no title)' )
-					: escape( title.rendered ),
-				opensInNewTab: false,
-			} )
-		);
+
+		function createDataTree( dataset ) {
+			const hashTable = Object.create( null );
+			const dataTree = [];
+
+			dataset.forEach( ( data ) => {
+				hashTable[ data.id ] = {
+					...data,
+					children: [],
+				};
+			} );
+
+			dataset.forEach( ( data ) => {
+				if ( data.parent ) {
+					hashTable[ data.parent ].children.push(
+						hashTable[ data.id ]
+					);
+				} else {
+					dataTree.push( hashTable[ data.id ] );
+				}
+			} );
+			return dataTree;
+		}
+
+		function initialiseBlocks( nodes ) {
+			return nodes.map( ( { title, type, link: url, id, children } ) => {
+				const innerBlocks =
+					children && children.length
+						? initialiseBlocks( children )
+						: [];
+
+				return createBlock(
+					'core/navigation-link',
+					{
+						type,
+						id,
+						url,
+						label: ! title.rendered
+							? __( '(no title)' )
+							: escape( title.rendered ),
+						opensInNewTab: false,
+					},
+					innerBlocks
+				);
+			} );
+		}
+
+		const menuTree = createDataTree( menuItems );
+
+		const menuBlocksTree = initialiseBlocks( menuTree );
+
+		return menuBlocksTree;
 	}, [ menuItems ] );
 
 	//
