@@ -26,6 +26,7 @@ function InlineLinkUI( {
 	onChange,
 	speak,
 	stopAddingLink,
+	forwardedRef,
 } ) {
 	/**
 	 * A unique key is generated when switching between editing and not editing
@@ -54,7 +55,9 @@ function InlineLinkUI( {
 	const [ nextLinkValue, setNextLinkValue ] = useState();
 
 	const anchorRef = useMemo( () => {
-		const selection = window.getSelection();
+		const { ownerDocument } = forwardedRef.current;
+		const { defaultView } = ownerDocument;
+		const selection = defaultView.getSelection();
 
 		if ( ! selection.rangeCount ) {
 			return;

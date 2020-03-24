@@ -1195,6 +1195,7 @@ class RichText extends Component {
 						onChange={ this.onChange }
 						onFocus={ onFocus }
 						formatTypes={ formatTypes }
+						forwardedRef={ forwardedRef }
 					/>
 				) }
 				{ children &&

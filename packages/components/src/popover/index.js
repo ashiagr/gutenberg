@@ -62,7 +62,26 @@ function computeAnchorRect(
 		}
 
 		if ( anchorRef.endContainer ) {
-			return getRectangleFromRange( anchorRef );
+			const { ownerDocument } = anchorRef.endContainer;
+			let rect = getRectangleFromRange( anchorRef );
+
+			if ( ownerDocument !== document ) {
+				const iframe = Array.from(
+					document.querySelectorAll( 'iframe' )
+				).find( ( element ) => {
+					return element.contentDocument === ownerDocument;
+				} );
+				const iframeRect = iframe.getBoundingClientRect();
+
+				rect = new window.DOMRect(
+					rect.left + iframeRect.left,
+					rect.top + iframeRect.top,
+					rect.width,
+					rect.height
+				);
+			}
+
+			return rect;
 		}
 
 		const { ownerDocument } = anchorRef;
