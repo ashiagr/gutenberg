@@ -88,4 +88,3 @@ export { default as WritingFlow } from './writing-flow';
  */
 
 export { default as BlockEditorProvider } from './provider';
-export { default as useSimulatedMediaQuery } from './use-simulated-media-query';

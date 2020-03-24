@@ -65,11 +65,8 @@ function VisualEditor() {
 	return (
 		<>
 			<Popover.Slot name="block-toolbar" />
-			<IFrame className="edit-post-visual-editor">
-				<BlockSelectionClearer
-					className="editor-styles-wrapper"
-					style={ inlineStyles }
-				>
+			<IFrame className="edit-post-visual-editor" style={ inlineStyles }>
+				<BlockSelectionClearer className="editor-styles-wrapper">
 					<VisualEditorGlobalKeyboardShortcuts />
 					<MultiSelectScrollIntoView />
 					<Typewriter>

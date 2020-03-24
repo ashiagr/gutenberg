@@ -1,7 +1,6 @@
 /**
  * WordPress dependencies
  */
-import { useSimulatedMediaQuery } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 
@@ -60,11 +59,6 @@ export function useResizeCanvas() {
 				return null;
 		}
 	};
-
-	useSimulatedMediaQuery(
-		'resizable-editor-section',
-		getCanvasWidth( deviceType )
-	);
 
 	return contentInlineStyles( deviceType );
 }
