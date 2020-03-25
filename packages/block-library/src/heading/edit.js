@@ -12,17 +12,15 @@ import HeadingToolbar from './heading-toolbar';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { PanelBody, __experimentalText as Text } from '@wordpress/components';
 import { createBlock } from '@wordpress/blocks';
 import {
 	AlignmentToolbar,
 	BlockControls,
-	InspectorControls,
 	RichText,
 	__experimentalUseColors,
 	__experimentalBlock as Block,
 } from '@wordpress/block-editor';
-import { useRef, Platform } from '@wordpress/element';
+import { useRef } from '@wordpress/element';
 
 function HeadingEdit( { attributes, setAttributes, mergeBlocks, onReplace } ) {
 	const ref = useRef();
@@ -42,8 +40,8 @@ function HeadingEdit( { attributes, setAttributes, mergeBlocks, onReplace } ) {
 		<>
 			<BlockControls>
 				<HeadingToolbar
-					minLevel={ Platform.OS === 'web' ? 2 : 1 }
-					maxLevel={ Platform.OS === 'web' ? 5 : 7 }
+					minLevel={ 1 }
+					maxLevel={ 7 }
 					selectedLevel={ level }
 					onChange={ ( newLevel ) =>
 						setAttributes( { level: newLevel } )
@@ -56,22 +54,6 @@ function HeadingEdit( { attributes, setAttributes, mergeBlocks, onReplace } ) {
 					} }
 				/>
 			</BlockControls>
-			{ Platform.OS === 'web' && (
-				<InspectorControls>
-					<PanelBody title={ __( 'Heading settings' ) }>
-						<Text variant="label">{ __( 'Level' ) }</Text>
-						<HeadingToolbar
-							isCollapsed={ false }
-							minLevel={ 1 }
-							maxLevel={ 7 }
-							selectedLevel={ level }
-							onChange={ ( newLevel ) =>
-								setAttributes( { level: newLevel } )
-							}
-						/>
-					</PanelBody>
-				</InspectorControls>
-			) }
 			{ InspectorControlsColorPanel }
 			<TextColor>
 				<RichText
