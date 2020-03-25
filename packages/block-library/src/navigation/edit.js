@@ -422,6 +422,7 @@ export default compose( [
 				}
 				return select( 'core' ).getEntityRecords( 'root', 'menu-item', {
 					menus: menuId,
+					per_page: -1,
 				} );
 			},
 			isRequestingPages: select( 'core/data' ).isResolving(
