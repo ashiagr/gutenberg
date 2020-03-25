@@ -11,6 +11,11 @@ import {
 	pressKeyWithModifier,
 } from '@wordpress/e2e-test-utils';
 
+/**
+ * External dependencies
+ */
+import menuItemsFixture from 'menu-items-response-fixture.json';
+
 async function mockPagesResponse( pages ) {
 	const mappedPages = pages.map( ( { title, slug }, index ) => ( {
 		id: index + 1,
@@ -69,33 +74,6 @@ const menusFixture = [
 	},
 ];
 
-const menuItemsFixture = [
-	{
-		title: 'Menu Item 1',
-		slug: 'menu-item-1',
-	},
-	{
-		title: 'Menu Item 2',
-		slug: 'menu-item-2',
-	},
-	{
-		title: 'Menu Item 3',
-		slug: 'menu-item-3',
-	},
-	{
-		title: 'Menu Item 4',
-		slug: 'menu-item-4',
-	},
-	{
-		title: 'Menu Item 5',
-		slug: 'menu-item-5',
-	},
-	{
-		title: 'Menu Item 6',
-		slug: 'menu-item-6',
-	},
-];
-
 /**
  * Creates mocked REST API responses for calls to menus and menu-items
  * endpoints.
@@ -113,25 +91,6 @@ async function mockAllMenusResponses(
 		? menus.map( ( menu, index ) => ( {
 				...menu,
 				id: index + 1,
-		  } ) )
-		: [];
-
-	const mappedMenuItems = menuItems.length
-		? menuItems.map( ( menuItem, index ) => ( {
-				id: index + 1,
-				title: {
-					raw: menuItem.title,
-					rendered: menuItem.title,
-				},
-				status: 'publish',
-				url: `https://this/is/a/test/menu/page/${ menuItem.slug }`,
-				attr_title: '',
-				description: '',
-				type: 'post_type',
-				type_label: 'Post',
-				object: 'post',
-				parent: 0,
-				menu_order: index + 1,
 		  } ) )
 		: [];
 
@@ -162,7 +121,7 @@ async function mockAllMenusResponses(
 
 				return isMenuItemsMatch;
 			},
-			onRequestMatch: createJSONResponse( mappedMenuItems ),
+			onRequestMatch: createJSONResponse( menuItems ),
 		},
 	] );
 }

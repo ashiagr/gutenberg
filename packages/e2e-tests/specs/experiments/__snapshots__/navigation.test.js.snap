@@ -2,17 +2,25 @@
 
 exports[`Navigation Creating from existing Menus allows a navigation block to be created from existing menus 1`] = `
 "<!-- wp:navigation -->
-<!-- wp:navigation-link {\\"label\\":\\"Menu Item 1\\",\\"type\\":\\"post_type\\",\\"id\\":1} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Sample Page\\",\\"type\\":\\"post_type\\",\\"id\\":322} -->
+<!-- wp:navigation-link {\\"label\\":\\"Google\\",\\"type\\":\\"custom\\",\\"id\\":323} -->
+<!-- wp:navigation-link {\\"label\\":\\"Esse harum sequi magnam quis debitis et\\",\\"type\\":\\"post_type\\",\\"id\\":368} -->
+<!-- wp:navigation-link {\\"label\\":\\"Et porro consequuntur necessitatibus consequatur\\",\\"type\\":\\"post_type\\",\\"id\\":369} -->
+<!-- wp:navigation-link {\\"label\\":\\"Libero esse nisi illo\\",\\"type\\":\\"post_type\\",\\"id\\":370} /-->
+<!-- /wp:navigation-link -->
+<!-- /wp:navigation-link -->
+<!-- /wp:navigation-link -->
+<!-- /wp:navigation-link -->
 
-<!-- wp:navigation-link {\\"label\\":\\"Menu Item 2\\",\\"type\\":\\"post_type\\",\\"id\\":2} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Sample Page\\",\\"type\\":\\"post_type\\",\\"id\\":324} -->
+<!-- wp:navigation-link {\\"label\\":\\"Qui sapiente necessitatibus totam\\",\\"type\\":\\"post_type\\",\\"id\\":371} -->
+<!-- wp:navigation-link {\\"label\\":\\"Dicta molestiae ut dolor quidem adipisci quae\\",\\"type\\":\\"post_type\\",\\"id\\":461} /-->
+<!-- /wp:navigation-link -->
 
-<!-- wp:navigation-link {\\"label\\":\\"Menu Item 3\\",\\"type\\":\\"post_type\\",\\"id\\":3} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Repellat aut qui eveniet\\",\\"type\\":\\"post_type\\",\\"id\\":372} /-->
+<!-- /wp:navigation-link -->
 
-<!-- wp:navigation-link {\\"label\\":\\"Menu Item 4\\",\\"type\\":\\"post_type\\",\\"id\\":4} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Menu Item 5\\",\\"type\\":\\"post_type\\",\\"id\\":5} /-->
-
-<!-- wp:navigation-link {\\"label\\":\\"Menu Item 6\\",\\"type\\":\\"post_type\\",\\"id\\":6} /-->
+<!-- wp:navigation-link {\\"label\\":\\"Sit impedit similique cupiditate\\",\\"type\\":\\"post_type\\",\\"id\\":373} /-->
 <!-- /wp:navigation -->"
 `;
 
