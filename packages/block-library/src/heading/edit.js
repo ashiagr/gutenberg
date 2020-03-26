@@ -6,7 +6,7 @@ import classnames from 'classnames';
 /**
  * Internal dependencies
  */
-import HeadingToolbar from './heading-toolbar';
+import HeadingLevelToolbar from './wip-heading-level-toolbar';
 
 /**
  * WordPress dependencies
@@ -39,9 +39,9 @@ function HeadingEdit( { attributes, setAttributes, mergeBlocks, onReplace } ) {
 	return (
 		<>
 			<BlockControls>
-				<HeadingToolbar
+				<HeadingLevelToolbar
 					minLevel={ 1 }
-					maxLevel={ 7 }
+					maxLevel={ 6 }
 					selectedLevel={ level }
 					onChange={ ( newLevel ) =>
 						setAttributes( { level: newLevel } )
